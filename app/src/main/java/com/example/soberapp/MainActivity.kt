@@ -30,6 +30,9 @@ import androidx.compose.ui.text.style.TextAlign.Companion.Center
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.soberapp.ui.theme.SoberAppTheme
+import java.time.LocalDate
+import java.time.Period
+import kotlin.time.measureTime
 
 
 class MainActivity : ComponentActivity() {
@@ -63,11 +66,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Counter(num: MutableState<Int>, modifier: Modifier = Modifier) {
+    val yearsMonthsWeeksDays = daysToYearsMonthsWeeksDays(num.value)
     Text(
-        text = "Time Sober:\n\n" + num.value.toString(),
+        text = "Time Sober:\n",
         textAlign = Center,
         modifier = modifier,
         fontSize = 56.sp
+    )
+    Text(
+        text = yearsMonthsWeeksDays,
+        textAlign = Center,
+        modifier = modifier,
+        fontSize = 28.sp
     )
 }
 
@@ -91,4 +101,32 @@ fun PlusButton(num: MutableState<Int>, modifier: Modifier = Modifier) {
             modifier = modifier.size(96.dp)
         )
     }
+}
+
+fun daysToYearsMonthsWeeksDays(days: Int): String {
+    val startDate = LocalDate.of(0, 1, 1)
+    val endDate = startDate.plusDays(days.toLong())
+    val period = Period.between(startDate, endDate)
+    val years = period.years
+    val months = period.months
+    val remainingDaysAfterMonths = period.days
+    val weeks = remainingDaysAfterMonths / 7
+    val daysLeft = remainingDaysAfterMonths % 7
+    if (years == 0) {
+        if (months == 0) {
+            if (weeks == 0) {
+                return "$days days"
+            }
+            else {
+                return "$weeks weeks, $daysLeft days"
+            }
+        }
+        else {
+            return "$months months, $weeks weeks, $daysLeft days"
+        }
+    }
+    else {
+        return "$years years, $months months, $weeks weeks, $daysLeft days"
+    }
+
 }
