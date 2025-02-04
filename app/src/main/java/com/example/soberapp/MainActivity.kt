@@ -21,7 +21,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -82,11 +84,18 @@ fun getDays(dataStore: DataStore<Preferences>): Flow<Int> {
 
 @Composable
 fun SoberAppScreen(num: Int, onIncrement: () -> Unit) {
+    var settingsVisible by remember { mutableStateOf(false) }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) {
         innerPadding ->
-        TopMenuBar()
+        TopMenuBar(
+            settingsVisible = settingsVisible,
+            setSettingsVisible = { settingsVisible = it }
+        )
+        if (settingsVisible) {
+            BlurScreen()
+        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -141,7 +150,7 @@ fun PlusButton(onIncrement: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopMenuBar() {
+fun TopMenuBar(settingsVisible: Boolean, setSettingsVisible: (Boolean) -> Unit) {
     Scaffold(
         modifier = Modifier
             .fillMaxWidth(),
@@ -155,7 +164,7 @@ fun TopMenuBar() {
                     )
                 },
                 actions = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {setSettingsVisible(!settingsVisible)}) {
                         Icon(
                             imageVector = Icons.Filled.Settings,
                             contentDescription = "Settings Icon"
@@ -164,10 +173,19 @@ fun TopMenuBar() {
                 }
             )
         }
-    ) {
-        innerPadding ->
+    ) {innerPadding ->
 
     }
+}
+
+@Composable
+fun BlurScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            //TODO fix blur not working
+            .blur((LocalConfiguration.current.screenWidthDp / 2).dp)
+    )
 }
 
 fun daysToYearsMonthsWeeksDays(days: Int): String {
