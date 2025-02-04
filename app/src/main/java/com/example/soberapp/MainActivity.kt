@@ -5,11 +5,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -18,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
@@ -77,7 +84,9 @@ fun getDays(dataStore: DataStore<Preferences>): Flow<Int> {
 fun SoberAppScreen(num: Int, onIncrement: () -> Unit) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-    ) { innerPadding ->
+    ) {
+        innerPadding ->
+        TopMenuBar()
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -127,6 +136,37 @@ fun PlusButton(onIncrement: () -> Unit) {
             tint = Color.Unspecified,
             modifier = Modifier.size(96.dp)
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopMenuBar() {
+    Scaffold(
+        modifier = Modifier
+            .fillMaxWidth(),
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Sober App",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
+                actions = {
+                    IconButton(onClick = {}) {
+                        Icon(
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = "Settings Icon"
+                        )
+                    }
+                }
+            )
+        }
+    ) {
+        innerPadding ->
+
     }
 }
 
