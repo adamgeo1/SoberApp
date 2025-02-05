@@ -85,17 +85,16 @@ fun getDays(dataStore: DataStore<Preferences>): Flow<Int> {
 @Composable
 fun SoberAppScreen(num: Int, onIncrement: () -> Unit) {
     var settingsVisible by remember { mutableStateOf(false) }
+
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize(),
     ) {
         innerPadding ->
         TopMenuBar(
             settingsVisible = settingsVisible,
             setSettingsVisible = { settingsVisible = it }
         )
-        if (settingsVisible) {
-            BlurScreen()
-        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -178,15 +177,7 @@ fun TopMenuBar(settingsVisible: Boolean, setSettingsVisible: (Boolean) -> Unit) 
     }
 }
 
-@Composable
-fun BlurScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            //TODO fix blur not working
-            .blur((LocalConfiguration.current.screenWidthDp / 2).dp)
-    )
-}
+
 
 fun daysToYearsMonthsWeeksDays(days: Int): String {
     val startDate = LocalDate.of(0, 1, 1)
