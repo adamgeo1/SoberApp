@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
@@ -139,7 +140,7 @@ fun PlusButton(onIncrement: () -> Unit) {
             )
     ) {
         Icon(
-            painter = painterResource(R.drawable.plus),
+            painter = painterResource(if (isSystemInDarkTheme()) R.drawable.plus_dark else R.drawable.plus),
             contentDescription = "Plus Button",
             tint = Color.Unspecified,
             modifier = Modifier.size(96.dp)
@@ -176,8 +177,18 @@ fun TopMenuBar(settingsVisible: Boolean, setSettingsVisible: (Boolean) -> Unit) 
 
     }
 }
+/*
+fun SettingsMenu() {
+    Box(
+        modifier = Modifier
+            .size(200.dp)
+            .background(Color.White)
+    ) {
 
+    }
+}
 
+ */
 
 fun daysToYearsMonthsWeeksDays(days: Int): String {
     val startDate = LocalDate.of(0, 1, 1)
