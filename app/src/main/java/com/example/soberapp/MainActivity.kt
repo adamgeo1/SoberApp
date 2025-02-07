@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -65,6 +67,12 @@ class MainActivity : ComponentActivity() {
                         lifecycleScope.launch {
                             saveDays(dataStore, numState)
                         }
+                    },
+                    resetDays = {
+                        numState = 0
+                        lifecycleScope.launch {
+                            saveDays(dataStore, numState)
+                        }
                     })
             }
         }
@@ -84,7 +92,7 @@ fun getDays(dataStore: DataStore<Preferences>): Flow<Int> {
 }
 
 @Composable
-fun SoberAppScreen(num: Int, onIncrement: () -> Unit) {
+fun SoberAppScreen(num: Int, resetDays: () -> Unit, onIncrement: () -> Unit) {
     var settingsVisible by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -96,6 +104,9 @@ fun SoberAppScreen(num: Int, onIncrement: () -> Unit) {
             settingsVisible = settingsVisible,
             setSettingsVisible = { settingsVisible = it }
         )
+        if (settingsVisible) {
+            SettingsMenu(resetDays)
+        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -177,18 +188,28 @@ fun TopMenuBar(settingsVisible: Boolean, setSettingsVisible: (Boolean) -> Unit) 
 
     }
 }
-/*
-fun SettingsMenu() {
+
+@Composable
+fun SettingsMenu(resetDays : () -> Unit) {
     Box(
         modifier = Modifier
-            .size(200.dp)
+            .width(300.dp)
+            .height(200.dp)
             .background(Color.White)
     ) {
-
+        Button(
+            onClick = { resetDays() },
+            modifier = Modifier
+                .background(Color.Red)
+        ) {
+            Text(
+                text = "Reset Days Sober"
+            )
+        }
     }
 }
 
- */
+
 
 fun daysToYearsMonthsWeeksDays(days: Int): String {
     val startDate = LocalDate.of(0, 1, 1)
