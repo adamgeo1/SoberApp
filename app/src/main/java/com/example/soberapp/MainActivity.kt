@@ -10,23 +10,30 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -104,9 +111,6 @@ fun SoberAppScreen(num: Int, resetDays: () -> Unit, onIncrement: () -> Unit) {
             settingsVisible = settingsVisible,
             setSettingsVisible = { settingsVisible = it }
         )
-        if (settingsVisible) {
-            SettingsMenu(resetDays)
-        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -120,6 +124,9 @@ fun SoberAppScreen(num: Int, resetDays: () -> Unit, onIncrement: () -> Unit) {
                 Counter(num)
                 PlusButton(onIncrement)
             }
+        }
+        if (settingsVisible) {
+            SettingsMenu(resetDays)
         }
     }
 }
@@ -193,20 +200,37 @@ fun TopMenuBar(settingsVisible: Boolean, setSettingsVisible: (Boolean) -> Unit) 
 fun SettingsMenu(resetDays : () -> Unit) {
     Box(
         modifier = Modifier
-            .width(300.dp)
-            .height(200.dp)
-            .background(Color.White)
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center)
     ) {
-        Button(
-            onClick = { resetDays() },
+        Box(
             modifier = Modifier
-                .background(Color.Red)
+                .width(225.dp)
+                .height(100.dp)
+                .background(MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(16.dp))
         ) {
-            Text(
-                text = "Reset Days Sober"
-            )
+            Button(
+                onClick = { resetDays() },
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onSecondaryContainer),
+                modifier = Modifier
+                    .background(Color.Transparent)
+                    .width(175.dp)
+                    .height(50.dp)
+                    .align(Alignment.Center)
+            ) {
+                Text(
+                    text = "Reset Days Sober",
+                    color = MaterialTheme.colorScheme.inverseOnSurface,
+                    fontSize = 14.sp,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .background(MaterialTheme.colorScheme.onSecondaryContainer)
+
+                )
+            }
         }
     }
+
 }
 
 
