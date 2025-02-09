@@ -45,7 +45,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
-import com.example.soberapp.ui.theme.SoberAppTheme
+import com.example.compose.SoberAppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -207,24 +207,22 @@ fun SettingsMenu(resetDays : () -> Unit) {
             modifier = Modifier
                 .width(225.dp)
                 .height(100.dp)
-                .background(MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(16.dp))
         ) {
             Button(
                 onClick = { resetDays() },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onSecondaryContainer),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimaryContainer),
                 modifier = Modifier
-                    .background(Color.Transparent)
                     .width(175.dp)
                     .height(50.dp)
                     .align(Alignment.Center)
             ) {
                 Text(
                     text = "Reset Days Sober",
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
                     fontSize = 14.sp,
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
-                        .background(MaterialTheme.colorScheme.onSecondaryContainer)
+                        .background(MaterialTheme.colorScheme.onPrimaryContainer)
 
                 )
             }
