@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -38,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.LineHeightStyle
@@ -157,7 +159,8 @@ fun SoberAppScreen(num: Int, resetDays: () -> Unit, onIncrement: () -> Unit, day
             }
         }
         if (settingsVisible) {
-            SettingsMenu(resetDays, daysFormat, daysFormatState)
+            SettingsMenu(resetDays, daysFormat, daysFormatState,
+                setSettingsVisible = { settingsVisible = it })
         }
     }
 }
@@ -231,61 +234,77 @@ fun TopMenuBar(settingsVisible: Boolean, setSettingsVisible: (Boolean) -> Unit) 
 }
 
 @Composable
-fun SettingsMenu(resetDays : () -> Unit, daysFormat : () -> Unit, daysFormatState: Boolean) {
+fun SettingsMenu(resetDays : () -> Unit, daysFormat : () -> Unit, daysFormatState: Boolean, setSettingsVisible: (Boolean) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .wrapContentSize(Alignment.Center)
-    ) {
-        Column(
-            modifier = Modifier
-                .width(225.dp)
-                .height(163.dp)
-                .padding(16.dp)
-                .background(MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(16.dp)),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = { resetDays() },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimaryContainer),
-                modifier = Modifier
-                    .width(175.dp)
-                    .height(50.dp)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                Text(
-                    text = "Reset Days Sober",
-                    fontSize = 14.sp,
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .background(MaterialTheme.colorScheme.onPrimaryContainer)
-
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = { setSettingsVisible(false) }
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                Text(
-                    text = "Days Format:\n" + if (daysFormatState) "Y/M/W/D" else "D",
-                    fontSize = 14.sp,
-                    textAlign = TextAlign.Center
-                )
-                Switch(
-                    checked = daysFormatState,
-                    onCheckedChange = { daysFormat() },
-                    colors = SwitchDefaults.colors(
-                        uncheckedBorderColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                        uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
-                        uncheckedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                        checkedBorderColor = MaterialTheme.colorScheme.secondaryContainer,
-                        checkedTrackColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                        checkedThumbColor = MaterialTheme.colorScheme.secondaryContainer
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = { setSettingsVisible(false) }
                     )
-                )
+                }
+        ) {
+            Column(
+                modifier = Modifier
+                    .width(225.dp)
+                    .height(163.dp)
+                    .padding(16.dp)
+                    .background(MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(16.dp)),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = { resetDays() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimaryContainer),
+                    modifier = Modifier
+                        .width(175.dp)
+                        .height(50.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(
+                        text = "Reset Days Sober",
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .background(MaterialTheme.colorScheme.onPrimaryContainer)
+
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(
+                        text = "Days Format:\n" + if (daysFormatState) "Y/M/W/D" else "D",
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Switch(
+                        checked = daysFormatState,
+                        onCheckedChange = { daysFormat() },
+                        colors = SwitchDefaults.colors(
+                            uncheckedBorderColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+                            uncheckedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            checkedBorderColor = MaterialTheme.colorScheme.secondaryContainer,
+                            checkedTrackColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            checkedThumbColor = MaterialTheme.colorScheme.secondaryContainer
+                        )
+                    )
+                }
             }
         }
     }
