@@ -24,6 +24,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -104,7 +106,8 @@ fun SoberAppScreen(num: Int, resetDays: () -> Unit, onIncrement: () -> Unit) {
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
         innerPadding ->
         TopMenuBar(
@@ -178,17 +181,20 @@ fun TopMenuBar(settingsVisible: Boolean, setSettingsVisible: (Boolean) -> Unit) 
                     Text(
                         "Sober App",
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 actions = {
                     IconButton(onClick = {setSettingsVisible(!settingsVisible)}) {
                         Icon(
                             imageVector = Icons.Filled.Settings,
-                            contentDescription = "Settings Icon"
+                            contentDescription = "Settings Icon",
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         }
     ) {innerPadding ->
